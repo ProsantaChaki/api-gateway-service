@@ -6,6 +6,7 @@ use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthChackerMiddleware
 {
@@ -26,17 +27,28 @@ class AuthChackerMiddleware
     public function handle(Request $request, Closure $next)
     {
         // Determine the service URL based on the request
-        $serviceUrl = 'http://localhost:8083/api/auth/auth_check';
+        $serviceUrl = env('USER_SERVICE_API_URL').'/auth/auth_check';
 
         // Transfer the request to the service and retrieve the response
         $response = $this->makeApiCall($request->method(), $serviceUrl, $request->header(),$request->all());
-        $headers = $request->header();
-        $headers['user_id'] = $response['response']['data']['id'];
-        $headers['name'] = $response['response']['data']['name'];
-        $headers['store_id'] = $response['response']['data']['store_id'];
-        $headers['role'] = $response['response']['data']['role'];
-        $request->headers->replace($headers);
-        //dd($response['response']['data']);
+
+        if (isset($response['response']['data'])){
+            $headers = $request->header();
+            $headers['user_id'] = $response['response']['data']['id'];
+            $headers['name'] = $response['response']['data']['name'];
+            $headers['store_id'] = $response['response']['data']['store_id'];
+            $headers['role'] = $response['response']['data']['role'];
+            $request->headers->replace($headers);
+        }
+
+        if(!$response['status']){
+            return response()->json([
+                'code' => Response::HTTP_UNAUTHORIZED,
+                'message' => 'Un authorized',
+                'data'=>null,
+                'errors' => [],
+            ]);
+        }
 
         return $next($request);
     }

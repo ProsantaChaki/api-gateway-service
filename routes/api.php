@@ -12,10 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('api.gateway')->group(function () {
-    Route::post('user/login');
-    Route::post('user/refresh');
-    Route::post('user/login');
-    Route::post('user/signup');
+    Route::any('/user/auth/{any}')->where('any', '.*');
 });
 Route::middleware(['api.authCheck','api.gateway'])->group(function () {
     Route::any('/inventory/{any}')->where('any', '.*');
