@@ -25,8 +25,8 @@ class ApiGatewayMiddleware
         } catch (\Exception $e) {
             return json_encode([
                 'code' => Response::HTTP_UNPROCESSABLE_ENTITY,
-                'message' => 'error',
-                'data'=>null,
+                'message' => 'error sd',
+                'data'=>$url,
                 'errors' => [],
             ],true);
         }
@@ -34,25 +34,41 @@ class ApiGatewayMiddleware
     public function handle(Request $request, Closure $next)
     {
         $serviceUrl = $this->getServiceUrl($request);
+        if (!$serviceUrl){
+            return json_encode([
+                'code' => Response::HTTP_NOT_FOUND,
+                'message' => 'error',
+                'data'=>null,
+                'errors' => [],
+            ],true);
+        }
 
         $response = $this->makeApiCall($request->method(), $serviceUrl, $request->header(),$request->all());
         return response($response);
     }
 
+    protected function addQueryParams(Request $request, $url){
+        $url = env('USER_SERVICE_API_URL') . str_replace('api/user', '', $request->path());
+        $queryParams = $request->query();
+        if (!empty($queryParams)) {
+            $url .= '?' . http_build_query($queryParams);
+        }
+        return $url;
+    }
     protected function getServiceUrl(Request $request): string
     {
 
         if ($request->is('api/user*')) {
-          return env('USER_SERVICE_API_URL') . str_replace('api/user', '', $request->path());
+          return $this->addQueryParams($request, env('USER_SERVICE_API_URL') . str_replace('api/user', '', $request->path()));
         }
         if ($request->is('api/inventory*')) {
-          return env('INVENTORY_SERVICE_API_URL') . str_replace('api/inventory', '', $request->path());
+            return $this->addQueryParams($request,  env('INVENTORY_SERVICE_API_URL') . str_replace('api/inventory', '', $request->path()));
         }
         if ($request->is('api/account*')) {
-          return env('ACCOUNT_SERVICE_API_URL') . str_replace('api/account', '', $request->path());
+            return $this->addQueryParams($request,  env('ACCOUNT_SERVICE_API_URL') . str_replace('api/account', '', $request->path()));
         }
         if ($request->is('api/point*')) {
-          return env('POINTS_SERVICE_API_URL') . str_replace('api/point', '', $request->path());
+            return $this->addQueryParams($request,  env('POINTS_SERVICE_API_URL') . str_replace('api/point', '', $request->path()));
         }
 
 
@@ -60,6 +76,6 @@ class ApiGatewayMiddleware
 
         // If no matching route is found, return a default service URL or throw an exception
         // Example: throw new \Exception('Invalid route');
-        return 'http://localhost:8082/api/product';
+        return false;
     }
 }
