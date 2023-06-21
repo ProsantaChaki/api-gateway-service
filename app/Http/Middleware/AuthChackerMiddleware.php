@@ -21,7 +21,8 @@ class AuthChackerMiddleware
             return ['status'=>true,
                 'response'=>json_decode($response->getBody(), true)];
         } catch (GuzzleException $e) {
-            return ['status'=>false];
+
+            return ['status'=>false, 'message'=>$e->getMessage()];
         }
     }
     public function handle(Request $request, Closure $next)
@@ -30,7 +31,7 @@ class AuthChackerMiddleware
         $serviceUrl = env('USER_SERVICE_API_URL').'/auth/auth_check';
 
         // Transfer the request to the service and retrieve the response
-        $response = $this->makeApiCall($request->method(), $serviceUrl, $request->header(),$request->all());
+        $response = $this->makeApiCall('get', $serviceUrl, $request->header(),$request->all());
 
         if (isset($response['response']['data'])){
             $headers = $request->header();
