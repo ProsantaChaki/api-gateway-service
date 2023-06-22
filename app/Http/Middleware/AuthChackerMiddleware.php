@@ -6,6 +6,7 @@ use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthChackerMiddleware
@@ -35,10 +36,11 @@ class AuthChackerMiddleware
 
         if (isset($response['response']['data'])){
             $headers = $request->header();
-            $headers['user_id'] = $response['response']['data']['id'];
+            $headers['user_id'] = $response['response']['data']['user_id'];
             $headers['name'] = $response['response']['data']['name'];
             $headers['store_id'] = $response['response']['data']['store_id'];
             $headers['role'] = $response['response']['data']['role'];
+            $headers['user_type'] = $response['response']['data']['user_type'];
             $request->headers->replace($headers);
         }
 
