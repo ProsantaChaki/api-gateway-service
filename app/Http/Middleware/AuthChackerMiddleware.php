@@ -29,18 +29,18 @@ class AuthChackerMiddleware
     public function handle(Request $request, Closure $next)
     {
         // Determine the service URL based on the request
-        $serviceUrl = env('USER_SERVICE_API_URL').'/auth/auth_check';
+        $serviceUrl = env('USER_SERVICE_API_URL').'/auth/v1/auth_check';
 
         // Transfer the request to the service and retrieve the response
         $response = $this->makeApiCall('get', $serviceUrl, $request->header(),$request->all());
 
         if (isset($response['response']['data'])){
             $headers = $request->header();
-            $headers['user_id'] = $response['response']['data']['user_id'];
+            $headers['user-id'] = $response['response']['data']['user_id'];
             $headers['name'] = $response['response']['data']['name'];
-            $headers['store_id'] = $response['response']['data']['store_id'];
+            $headers['store-id'] = $response['response']['data']['store_id'];
             $headers['role'] = $response['response']['data']['role'];
-            $headers['user_type'] = $response['response']['data']['user_type'];
+            $headers['user-type'] = $response['response']['data']['user_type'];
             $request->headers->replace($headers);
         }
 
