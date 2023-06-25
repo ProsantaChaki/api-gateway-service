@@ -25,7 +25,7 @@ class ApiGatewayMiddleware
         } catch (\Exception $e) {
             return json_encode([
                 'code' => Response::HTTP_UNPROCESSABLE_ENTITY,
-                'message' => 'error sd',
+                'message' => 'error',
                 'data'=>$url,
                 'errors' => [],
             ],true);
@@ -48,7 +48,6 @@ class ApiGatewayMiddleware
     }
 
     protected function addQueryParams(Request $request, $url){
-        $url = env('USER_SERVICE_API_URL') . str_replace('api/user', '', $request->path());
         $queryParams = $request->query();
         if (!empty($queryParams)) {
             $url .= '?' . http_build_query($queryParams);
@@ -71,11 +70,6 @@ class ApiGatewayMiddleware
             return $this->addQueryParams($request,  env('POINTS_SERVICE_API_URL') . str_replace('api/point', '', $request->path()));
         }
 
-
-        // Add more route-to-service mappings as needed
-
-        // If no matching route is found, return a default service URL or throw an exception
-        // Example: throw new \Exception('Invalid route');
         return false;
     }
 }
