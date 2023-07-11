@@ -19,6 +19,7 @@ Route::middleware(['api.authCheck','api.gateway'])->group(function () {
     Route::any('/account/{any}')->where('any', '.*');
     Route::any('/user/{any}')->where('any', '.*');
     Route::any('/point/{any}')->where('any', '.*');
+    Route::any('/report/{any}')->where('any', '.*');
 });
 
 

@@ -34,6 +34,7 @@ class AuthChackerMiddleware
         // Transfer the request to the service and retrieve the response
         $response = $this->makeApiCall('get', $serviceUrl, $request->header(),$request->all());
 
+        //dd($response);
         if (isset($response['response']['data'])){
             $headers = $request->header();
             $headers['user-id'] = $response['response']['data']['user_id'];
@@ -43,11 +44,12 @@ class AuthChackerMiddleware
             $headers['user-type'] = $response['response']['data']['user_type'];
             $request->headers->replace($headers);
         }
+       // dd($request->header());
 
         if(!$response['status']){
             return response()->json([
                 'code' => Response::HTTP_UNAUTHORIZED,
-                'message' => 'Un authorized',
+                'message' => 'Un authorized'.$response['message'],
                 'data'=>null,
                 'errors' => [],
             ]);

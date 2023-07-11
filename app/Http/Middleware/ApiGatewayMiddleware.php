@@ -25,8 +25,8 @@ class ApiGatewayMiddleware
         } catch (\Exception $e) {
             return json_encode([
                 'code' => Response::HTTP_UNPROCESSABLE_ENTITY,
-                'message' => 'error',
-                'data'=>$url,
+                'message' => 'error'.$e->getMessage(),
+                'data'=>null,
                 'errors' => [],
             ],true);
         }
@@ -68,6 +68,9 @@ class ApiGatewayMiddleware
         }
         if ($request->is('api/point*')) {
             return $this->addQueryParams($request,  env('POINTS_SERVICE_API_URL') . str_replace('api/point', '', $request->path()));
+        }
+        if ($request->is('api/report*')) {
+            return $this->addQueryParams($request,  env('REPORT_SERVICE_API_URL') . str_replace('api/report', '', $request->path()));
         }
 
         return false;
