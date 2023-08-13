@@ -6,7 +6,6 @@ use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthChackerMiddleware
@@ -34,17 +33,13 @@ class AuthChackerMiddleware
         // Transfer the request to the service and retrieve the response
         $response = $this->makeApiCall('get', $serviceUrl, $request->header(),$request->all());
 
-        //dd($response);
+
         if (isset($response['response']['data'])){
             $headers = $request->header();
-            $headers['user-id'] = $response['response']['data']['user_id'];
-            $headers['name'] = $response['response']['data']['name'];
-            $headers['store-id'] = $response['response']['data']['store_id'];
-            $headers['role'] = $response['response']['data']['role'];
-            $headers['user-type'] = $response['response']['data']['user_type'];
+            $headers['User-Details'] = json_encode($response['response']['data']);
             $request->headers->replace($headers);
         }
-       // dd($request->header());
+
 
         if(!$response['status']){
             return response()->json([

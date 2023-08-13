@@ -15,6 +15,7 @@ class ApiGatewayMiddleware
     function makeApiCall($method, $url, $headers = [], $body = null)
     {
         $client = new Client();
+
         try {
             $response = $client->request($method, $url, [
                 'headers' => $headers,
@@ -25,7 +26,7 @@ class ApiGatewayMiddleware
         } catch (\Exception $e) {
             return json_encode([
                 'code' => Response::HTTP_UNPROCESSABLE_ENTITY,
-                'message' => 'error'.$e->getMessage(),
+                'message' => 'error '.$e->getMessage(),
                 'data'=>null,
                 'errors' => [],
             ],true);
@@ -42,6 +43,8 @@ class ApiGatewayMiddleware
                 'errors' => [],
             ],true);
         }
+
+
 
         $response = $this->makeApiCall($request->method(), $serviceUrl, $request->header(),$request->all());
         return response($response);
@@ -71,6 +74,9 @@ class ApiGatewayMiddleware
         }
         if ($request->is('api/report*')) {
             return $this->addQueryParams($request,  env('REPORT_SERVICE_API_URL') . str_replace('api/report', '', $request->path()));
+        }
+        if ($request->is('api/info*')) {
+            return $this->addQueryParams($request,  env('INFORMATION_SERVICE_API_URL') . str_replace('api/info', '', $request->path()));
         }
 
         return false;
