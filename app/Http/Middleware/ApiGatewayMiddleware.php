@@ -60,23 +60,23 @@ class ApiGatewayMiddleware
     protected function getServiceUrl(Request $request): string
     {
 
-        if ($request->is('api/user*')) {
-          return $this->addQueryParams($request, env('USER_SERVICE_API_URL') . str_replace('api/user', '', $request->path()));
+        if ($request->is('api/user-service*')) {
+          return $this->addQueryParams($request, env('USER_SERVICE_API_URL') . str_replace('api/user-service', '', $request->path()));
         }
-        if ($request->is('api/inventory*')) {
-            return $this->addQueryParams($request,  env('INVENTORY_SERVICE_API_URL') . str_replace('api/inventory', '', $request->path()));
+        if ($request->is('api/inventory-service*')) {
+            return $this->addQueryParams($request,  env('INVENTORY_SERVICE_API_URL') . str_replace('api/inventory-service', '', $request->path()));
         }
-        if ($request->is('api/account*')) {
-            return $this->addQueryParams($request,  env('ACCOUNT_SERVICE_API_URL') . str_replace('api/account', '', $request->path()));
+        if ($request->is('api/account-service*')) {
+            return $this->addQueryParams($request,  env('ACCOUNT_SERVICE_API_URL') . str_replace('api/account-service', '', $request->path()));
         }
-        if ($request->is('api/point*')) {
-            return $this->addQueryParams($request,  env('POINTS_SERVICE_API_URL') . str_replace('api/point', '', $request->path()));
+        if ($request->is('api/gift-service*')) {
+            return $this->addQueryParams($request,  env('POINTS_SERVICE_API_URL') . str_replace('api/gift-service', '', $request->path()));
         }
-        if ($request->is('api/report*')) {
-            return $this->addQueryParams($request,  env('REPORT_SERVICE_API_URL') . str_replace('api/report', '', $request->path()));
+        if ($request->is('api/report-service*')) {
+            return $this->addQueryParams($request,  env('REPORT_SERVICE_API_URL') . str_replace('api/report-service', '', $request->path()));
         }
-        if ($request->is('api/info*')) {
-            return $this->addQueryParams($request,  env('INFORMATION_SERVICE_API_URL') . str_replace('api/info', '', $request->path()));
+        if ($request->is('api/info-service*')) {
+            return $this->addQueryParams($request,  env('INFORMATION_SERVICE_API_URL') . str_replace('api/info-service', '', $request->path()));
         }
 
         return false;

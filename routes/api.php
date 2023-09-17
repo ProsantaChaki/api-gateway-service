@@ -1,28 +1,20 @@
 <?php
 
-use App\Http\Controllers\ProductCategoryController;
-
-use App\Http\Controllers\ProductStockController;
-
-use App\Http\Controllers\UnitController;
-use App\Http\Controllers\UnitConversionController;
-
 use Illuminate\Support\Facades\Route;
 
-
-
 Route::middleware('api.gateway')->group(function () {
-    Route::any('/user/auth/{any}')->where('any', '.*');
+    Route::any('/user-service/auth/{any}')->where('any', '.*');
 });
 Route::middleware(['api.authCheck','api.gateway'])->group(function () {
-    Route::any('/inventory/{any}')->where('any', '.*');
-    Route::any('/account/{any}')->where('any', '.*');
-    Route::any('/user/{any}')->where('any', '.*');
-    Route::any('/point/{any}')->where('any', '.*');
-    Route::any('/report/{any}')->where('any', '.*');
-    Route::any('/info/training/{any}')->where('any', '.*');
+    Route::any('/inventory-service/{any}')->where('any', '.*');
+    Route::any('/account-service/{any}')->where('any', '.*');
+    Route::any('/user-service/{any}')->where('any', '.*');
+    Route::any('/gift-service/{any}')->where('any', '.*');
+    Route::any('/report-service/{any}')->where('any', '.*');
+    Route::any('/info-service/training/{any}')->where('any', '.*');
+    Route::any('/info-service/admin/{any}')->where('any', '.*');
 });
 
 Route::middleware(['api.gateway'])->group(function () {
-    Route::any('/info/{any}')->where('any', '.*');
+    Route::any('/info-service/{any}')->where('any', '.*');
 });
