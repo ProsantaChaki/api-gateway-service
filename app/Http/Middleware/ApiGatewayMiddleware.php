@@ -78,6 +78,9 @@ class ApiGatewayMiddleware
         if ($request->is('api/info-service*')) {
             return $this->addQueryParams($request,  env('INFORMATION_SERVICE_API_URL') . str_replace('api/info-service', '', $request->path()));
         }
+        if ($request->is('api/notification-service*')) {
+            return $this->addQueryParams($request,  env('NOTIFICATION_SERVICE_API_URL') . str_replace('api/notification-service', '', $request->path()));
+        }
 
         return false;
     }

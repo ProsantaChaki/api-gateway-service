@@ -17,4 +17,6 @@ Route::middleware(['api.authCheck','api.gateway'])->group(function () {
 
 Route::middleware(['api.gateway'])->group(function () {
     Route::any('/info-service/{any}')->where('any', '.*');
+    Route::any('/notification-service/otp/{any}')->where('any', '.*');
+
 });
